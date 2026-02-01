@@ -125,3 +125,167 @@ describe("Model Classes Structure", () => {
         expect(session.myTeam).toHaveLength(0);
     });
 });
+
+describe("Champion Search/Filter Functionality", () => {
+    it("should filter champions by exact match", () => {
+        const champions = [
+            { id: 1, name: "Aatrox" },
+            { id: 2, name: "Ahri" },
+            { id: 3, name: "Akali" }
+        ];
+
+        const filtered = champions.filter(c => c.name.toLowerCase().includes("atr"));
+        expect(filtered).toHaveLength(1);
+        expect(filtered[0].name).toBe("Aatrox");
+    });
+
+    it("should filter champions case-insensitively", () => {
+        const champions = [
+            { id: 1, name: "Aatrox" },
+            { id: 2, name: "Ahri" },
+            { id: 3, name: "Akali" }
+        ];
+
+        const filtered = champions.filter(c => c.name.toLowerCase().includes("AHRI".toLowerCase()));
+        expect(filtered).toHaveLength(1);
+        expect(filtered[0].name).toBe("Ahri");
+    });
+
+    it("should filter champions by partial name", () => {
+        const champions = [
+            { id: 1, name: "Aatrox" },
+            { id: 2, name: "Ahri" },
+            { id: 3, name: "Akali" }
+        ];
+
+        const filtered = champions.filter(c => c.name.toLowerCase().includes("a"));
+        expect(filtered).toHaveLength(3);
+    });
+
+    it("should return no results for non-matching query", () => {
+        const champions = [
+            { id: 1, name: "Aatrox" },
+            { id: 2, name: "Ahri" },
+            { id: 3, name: "Akali" }
+        ];
+
+        const filtered = champions.filter(c => c.name.toLowerCase().includes("xyz"));
+        expect(filtered).toHaveLength(0);
+    });
+
+    it("should return all champions with empty query", () => {
+        const champions = [
+            { id: 1, name: "Aatrox" },
+            { id: 2, name: "Ahri" },
+            { id: 3, name: "Akali" }
+        ];
+
+        const query = "";
+        const filtered = champions.filter(c => !query || c.name.toLowerCase().includes(query.toLowerCase()));
+        expect(filtered).toHaveLength(3);
+    });
+
+    it("should handle whitespace in query", () => {
+        const champions = [
+            { id: 1, name: "Aatrox" },
+            { id: 2, name: "Ahri" },
+            { id: 3, name: "Akali" }
+        ];
+
+        const query = "  ahri  ";
+        const normalizedQuery = query.toLowerCase().trim();
+        const filtered = champions.filter(c => !normalizedQuery || c.name.toLowerCase().includes(normalizedQuery));
+        expect(filtered).toHaveLength(1);
+        expect(filtered[0].name).toBe("Ahri");
+    });
+
+    it("should support multiple character search", () => {
+        const champions = [
+            { id: 1, name: "Aatrox" },
+            { id: 2, name: "Ahri" },
+            { id: 3, name: "Akali" },
+            { id: 4, name: "Amumu" }
+        ];
+
+        const filtered = champions.filter(c => c.name.toLowerCase().includes("am"));
+        expect(filtered).toHaveLength(1);
+        expect(filtered[0].name).toBe("Amumu");
+    });
+
+    it("should find multiple matches", () => {
+        const champions = [
+            { id: 1, name: "Aatrox" },
+            { id: 2, name: "Ahri" },
+            { id: 3, name: "Akali" },
+            { id: 4, name: "Alistar" }
+        ];
+
+        const filtered = champions.filter(c => c.name.toLowerCase().includes("al"));
+        expect(filtered).toHaveLength(2);
+        expect(filtered.map(c => c.name)).toContain("Akali");
+        expect(filtered.map(c => c.name)).toContain("Alistar");
+    });
+
+    it("should handle special characters in champion names", () => {
+        const champions = [
+            { id: 1, name: "Kha'Zix" },
+            { id: 2, name: "Kai'Sa" },
+            { id: 3, name: "Ahri" }
+        ];
+
+        const filtered = champions.filter(c => c.name.toLowerCase().includes("zix"));
+        expect(filtered).toHaveLength(1);
+        expect(filtered[0].name).toBe("Kha'Zix");
+    });
+
+    it("should reset filter when query becomes empty", () => {
+        const champions = [
+            { id: 1, name: "Aatrox" },
+            { id: 2, name: "Ahri" },
+            { id: 3, name: "Akali" }
+        ];
+
+        // First filter
+        let filtered = champions.filter(c => c.name.toLowerCase().includes("ah"));
+        expect(filtered).toHaveLength(1);
+
+        // Reset with empty query
+        filtered = champions.filter(c => !("") || c.name.toLowerCase().includes(""));
+        expect(filtered).toHaveLength(3);
+    });
+
+    it("should handle rapid search changes", () => {
+        const champions = [
+            { id: 1, name: "Aatrox" },
+            { id: 2, name: "Ahri" },
+            { id: 3, name: "Akali" },
+            { id: 4, name: "Amumu" }
+        ];
+
+        // Simulate rapid typing: "a" -> "aa" -> "aat" -> "aatr"
+        let queries = ["a", "aa", "aat", "aatr"];
+        let results = queries.map(q => 
+            champions.filter(c => c.name.toLowerCase().includes(q.toLowerCase()))
+        );
+
+        expect(results[0]).toHaveLength(4); // "a" matches all
+        expect(results[1]).toHaveLength(1); // "aa" matches Aatrox
+        expect(results[2]).toHaveLength(1); // "aat" matches Aatrox
+        expect(results[3]).toHaveLength(1); // "aatr" matches Aatrox
+    });
+
+    it("should support search from any position in name", () => {
+        const champions = [
+            { id: 1, name: "Vladimir" },
+            { id: 2, name: "Teemo" },
+            { id: 3, name: "Twisted Fate" }
+        ];
+
+        const filtered = champions.filter(c => c.name.toLowerCase().includes("sad"));
+        expect(filtered).toHaveLength(0);
+
+        const filtered2 = champions.filter(c => c.name.toLowerCase().includes("lad"));
+        expect(filtered2).toHaveLength(1);
+        expect(filtered2[0].name).toBe("Vladimir");
+    });
+});
