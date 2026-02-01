@@ -22,13 +22,17 @@
   ],
   "scripts": {
     "build": "vite build",
-    "watch": "vite build --watch --outDir ."
+    "watch": "vite build --watch --outDir .",
+    "test": "vitest",
+    "test:ui": "vitest --ui",
+    "test:coverage": "vitest --coverage"
   },
   "bugs": {
     "url": "https://github.com/controlado/auto-champion-select/issues"
   },
   "homepage": "https://github.com/controlado/auto-champion-select#readme",
   "devDependencies": {
+    "vitest": "^0.34.0",
     "vite": "^4.4.6",
     "vite-plugin-css-injected-by-js": "^3.2.1"
   }
