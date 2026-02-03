@@ -153,13 +153,15 @@ function buildChampionSelectUI() {
 
     // Other cards
     const primaryRoleCard = createCard({
-        title: "PRIMARY ROLE",
-        children: [primaryRoleDropdown.element, primaryRoleChampion1Dropdown.element, primaryRoleChampion2Dropdown.element]
+        title: "PRIMARY",
+        headerContent: primaryRoleDropdown.element,
+        children: [primaryRoleChampion1Dropdown.element, primaryRoleChampion2Dropdown.element]
     });
     const picksCard = createCard({ title: "PICKS", children: [] });
     const secondaryRoleCard = createCard({
-        title: "SECONDARY ROLE",
-        children: [secondaryRoleDropdown.element, secondaryRoleChampion1Dropdown.element, secondaryRoleChampion2Dropdown.element]
+        title: "SECONDARY",
+        headerContent: secondaryRoleDropdown.element,
+        children: [secondaryRoleChampion1Dropdown.element, secondaryRoleChampion2Dropdown.element]
     });
     const banCard = createCard({
         title: "BANS",
@@ -197,10 +199,14 @@ function buildChampionSelectUI() {
     console.debug(`auto-champion-select(${version}): Report bugs to Balaclava#1912`);
 }
 
-function createCard({ title, children, contentStyle }) {
+function createCard({ title, children, contentStyle, headerContent }) {
     const card = document.createElement("div");
     card.style.cssText = "border: 1px solid #785a28; border-radius: 4px; padding: 8px; background: rgba(0,0,0,0.3);";
-    card.innerHTML = `<div style='font-weight: bold; margin-bottom: 6px; color: #c89b3c;'>${title}</div>`;
+    const header = document.createElement("div");
+    header.style.cssText = "font-weight: bold; margin-bottom: 6px; color: #c89b3c; display: flex; align-items: center; gap: 10px;";
+    header.textContent = title;
+    if (headerContent) header.append(headerContent);
+    card.append(header);
     const content = document.createElement("div");
     content.style.cssText = contentStyle || "display: flex; flex-direction: column; gap: 6px;";
     children.forEach(child => content.append(child));
