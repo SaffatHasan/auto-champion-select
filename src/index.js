@@ -157,7 +157,6 @@ function buildChampionSelectUI() {
         headerContent: primaryRoleDropdown.element,
         children: [primaryRoleChampion1Dropdown.element, primaryRoleChampion2Dropdown.element]
     });
-    const picksCard = createCard({ title: "PICKS", children: [] });
     const secondaryRoleCard = createCard({
         title: "SECONDARY",
         headerContent: secondaryRoleDropdown.element,
@@ -170,11 +169,13 @@ function buildChampionSelectUI() {
 
     // Assemble UI
     const uiContainer = document.createElement("div");
-    uiContainer.style.cssText = "display: flex; flex-direction: column; gap: 12px; padding: 8px;";
+    uiContainer.style.cssText = "display: flex; flex-direction: column; gap: 8px; padding: 0;";
     // Add settings row at the top
     uiContainer.append(
         createSettingsRow([autoAcceptCheckbox, autoPickCheckbox, banCheckbox]),
-        primaryRoleCard, picksCard, secondaryRoleCard, banCard
+        primaryRoleCard,
+        secondaryRoleCard,
+        banCard
     );
 
     // Wrapper and header
@@ -201,14 +202,14 @@ function buildChampionSelectUI() {
 
 function createCard({ title, children, contentStyle, headerContent }) {
     const card = document.createElement("div");
-    card.style.cssText = "border: 1px solid #785a28; border-radius: 4px; padding: 8px; background: rgba(0,0,0,0.3);";
+    card.style.cssText = "background: rgba(200,155,60,0.18); border-radius: 4px; margin-bottom: 8px; box-shadow: 0 1px 4px 0 rgba(120,90,40,0.10);";
     const header = document.createElement("div");
-    header.style.cssText = "font-weight: bold; margin-bottom: 6px; color: #c89b3c; display: flex; align-items: center; gap: 10px;";
+    header.style.cssText = "font-weight: bold; margin-bottom: 6px; color: #c89b3c; display: flex; align-items: center; gap: 10px; padding: 6px 10px 0 10px;";
     header.textContent = title;
     if (headerContent) header.append(headerContent);
     card.append(header);
     const content = document.createElement("div");
-    content.style.cssText = contentStyle || "display: flex; flex-direction: column; gap: 6px;";
+    content.style.cssText = (contentStyle || "display: flex; flex-direction: column; gap: 6px;") + "; padding: 0 10px 10px 10px;";
     children.forEach(child => content.append(child));
     card.append(content);
     return card;
