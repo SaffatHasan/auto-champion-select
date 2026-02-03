@@ -1,5 +1,4 @@
 import { request, sleep } from "https://cdn.jsdelivr.net/npm/balaclava-utils@latest";
-import defaultPluginConfig from "./config.json";
 
 /**
  * @author balaclava

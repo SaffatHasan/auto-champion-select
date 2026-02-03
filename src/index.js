@@ -1,5 +1,5 @@
 import { request, sleep, linkEndpoint } from "https://cdn.jsdelivr.net/npm/balaclava-utils@latest";
-import { ChampionSelect, Dropdown, RoleDropdown, Checkbox, SocialSection, AssignedRole } from "./models.js";
+import { ChampionSelect, Dropdown, RoleDropdown, Checkbox, SocialSection, AssignedRole } from "./model/index.js";
 import { AutoPickSwitchAction, AutoBanSwitchAction, ForcePickSwitchAction, ForceBanSwitchAction, RefreshDropdownsAction, addActions } from "./actions.js";
 
 import { version } from "../package.json";
