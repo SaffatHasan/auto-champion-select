@@ -15,6 +15,8 @@ import "./assets/style.css";
 const championSelect = new ChampionSelect();
 
 const autoAcceptCheckbox = new Checkbox("Accept", "controladoAutoAccept");
+const autoPickCheckbox = new Checkbox("Pick", "controladoPick");
+const banCheckbox = new Checkbox("Ban", "controladoBan");
 
 // Simplified role-based pick system - only show champion picks for the selected role
 const primaryRoleDropdown = new RoleDropdown("Primary Role", "controladoPrimaryRole");
@@ -29,8 +31,6 @@ const secondaryRoleChampion2Dropdown = new Dropdown("Champion 2", "controladoSec
 primaryRoleDropdown.setOtherRoleDropdown(secondaryRoleDropdown);
 secondaryRoleDropdown.setOtherRoleDropdown(primaryRoleDropdown);
 
-const autoPickCheckbox = new Checkbox("Enable Picks", "controladoPick");
-const banCheckbox = new Checkbox("Enable Bans", "controladoBan");
 const firstBanDropdown = new Dropdown("Ban 1", "controladoBan", 0, getAllChampions);
 const secondBanDropdown = new Dropdown("Ban 2", "controladoBan", 1, getAllChampions);
 
@@ -129,92 +129,81 @@ window.addEventListener("load", async () => {
         else { championSelect.unmount(); }
     });
 
-    // Build card-based UI layout
-    const uiContainer = document.createElement("div");
-    uiContainer.style.cssText = "display: flex; flex-direction: column; gap: 12px; padding: 8px;";
+    // Replace the original block with a call to buildChampionSelectUI()
+    buildChampionSelectUI();
+    console.debug(`auto-champion-select(${version}): Report bugs to Balaclava#1912`);
+});
 
-    // Primary Role Card
-    const primaryRoleCard = document.createElement("div");
-    primaryRoleCard.style.cssText = "border: 1px solid #785a28; border-radius: 4px; padding: 8px; background: rgba(0,0,0,0.3);";
-    primaryRoleCard.innerHTML = "<div style='font-weight: bold; margin-bottom: 6px; color: #c89b3c;'>PRIMARY ROLE</div>";
-    const primaryRoleContent = document.createElement("div");
-    primaryRoleContent.style.cssText = "display: flex; flex-direction: column; gap: 6px;";
-    primaryRoleContent.append(
-        primaryRoleDropdown.element,
-        primaryRoleChampion1Dropdown.element,
-        primaryRoleChampion2Dropdown.element
-    );
-    primaryRoleCard.append(primaryRoleContent);
+function buildChampionSelectUI() {
+    const socialContainer = getSocialContainer();
+    if (!socialContainer) {
+        console.error("auto-champion-select: socialContainer not found. UI will not be rendered.");
+        return;
+    }
 
-    // Picks Card
-    const picksCard = document.createElement("div");
-    picksCard.style.cssText = "border: 1px solid #785a28; border-radius: 4px; padding: 8px; background: rgba(0,0,0,0.3);";
-    picksCard.innerHTML = "<div style='font-weight: bold; margin-bottom: 6px; color: #c89b3c;'>PICKS</div>";
-    const picksContent = document.createElement("div");
-    picksContent.style.cssText = "display: flex; flex-direction: column; gap: 6px;";
-    picksContent.append(autoPickCheckbox.element);
-    picksCard.append(picksContent);
+    // Settings as a single row (no card, no title, no background coloring)
+    function createSettingsRow(checkboxes) {
+        const row = document.createElement("div");
+        row.style.cssText = "display: flex; flex-direction: row; align-items: center; gap: 18px; margin-bottom: 12px; width: 100%;";
+        checkboxes.forEach(cb => {
+            row.append(cb.element);
+        });
+        return row;
+    }
 
-    // Secondary Role Card
-    const secondaryRoleCard = document.createElement("div");
-    secondaryRoleCard.style.cssText = "border: 1px solid #785a28; border-radius: 4px; padding: 8px; background: rgba(0,0,0,0.3);";
-    secondaryRoleCard.innerHTML = "<div style='font-weight: bold; margin-bottom: 6px; color: #c89b3c;'>SECONDARY ROLE</div>";
-    const secondaryRoleContent = document.createElement("div");
-    secondaryRoleContent.style.cssText = "display: flex; flex-direction: column; gap: 6px;";
-    secondaryRoleContent.append(
-        secondaryRoleDropdown.element,
-        secondaryRoleChampion1Dropdown.element,
-        secondaryRoleChampion2Dropdown.element
-    );
-    secondaryRoleCard.append(secondaryRoleContent);
-
-    // Ban Card
-    const banCard = document.createElement("div");
-    banCard.style.cssText = "border: 1px solid #785a28; border-radius: 4px; padding: 8px; background: rgba(0,0,0,0.3);";
-    banCard.innerHTML = "<div style='font-weight: bold; margin-bottom: 6px; color: #c89b3c;'>BANS</div>";
-    const banContent = document.createElement("div");
-    banContent.style.cssText = "display: flex; flex-direction: column; gap: 6px;";
-    banContent.append(
-        banCheckbox.element,
-        firstBanDropdown.element,
-        secondBanDropdown.element
-    );
-    banCard.append(banContent);
-
-    // Settings Card
-    const settingsCard = document.createElement("div");
-    settingsCard.style.cssText = "border: 1px solid #785a28; border-radius: 4px; padding: 8px; background: rgba(0,0,0,0.3);";
-    settingsCard.innerHTML = "<div style='font-weight: bold; margin-bottom: 6px; color: #c89b3c;'>SETTINGS</div>";
-    const settingsContent = document.createElement("div");
-    settingsContent.append(autoAcceptCheckbox.element);
-    settingsCard.append(settingsContent);
+    // Other cards
+    const primaryRoleCard = createCard({
+        title: "PRIMARY ROLE",
+        children: [primaryRoleDropdown.element, primaryRoleChampion1Dropdown.element, primaryRoleChampion2Dropdown.element]
+    });
+    const picksCard = createCard({ title: "PICKS", children: [] });
+    const secondaryRoleCard = createCard({
+        title: "SECONDARY ROLE",
+        children: [secondaryRoleDropdown.element, secondaryRoleChampion1Dropdown.element, secondaryRoleChampion2Dropdown.element]
+    });
+    const banCard = createCard({
+        title: "BANS",
+        children: [firstBanDropdown.element, secondBanDropdown.element]
+    });
 
     // Assemble UI
-    uiContainer.append(primaryRoleCard, picksCard, secondaryRoleCard, banCard, settingsCard);
+    const uiContainer = document.createElement("div");
+    uiContainer.style.cssText = "display: flex; flex-direction: column; gap: 12px; padding: 8px;";
+    // Add settings row at the top
+    uiContainer.append(
+        createSettingsRow([autoAcceptCheckbox, autoPickCheckbox, banCheckbox]),
+        primaryRoleCard, picksCard, secondaryRoleCard, banCard
+    );
 
-    // Add a wrapper container with styling
+    // Wrapper and header
     const pluginWrapper = document.createElement("div");
     pluginWrapper.style.cssText = "margin: 8px 4px; border: 1px solid #785a28; border-radius: 2px; background: rgba(0,0,0,0.2);";
-    
-    // Add header
     const pluginHeader = document.createElement("div");
     pluginHeader.style.cssText = "background: rgba(200,155,60,0.2); padding: 8px 10px; border-bottom: 1px solid #785a28; color: #c89b3c; font-weight: bold; font-size: 12px; cursor: pointer; user-select: none; display: flex; justify-content: space-between; align-items: center;";
     pluginHeader.innerHTML = "Auto Champion Select <span style='font-size: 10px; opacity: 0.7;'>▼</span>";
-    
     let isExpanded = false;
     pluginHeader.addEventListener("click", () => {
         isExpanded = !isExpanded;
         contentWrapper.style.display = isExpanded ? "block" : "none";
         pluginHeader.style.opacity = isExpanded ? "1" : "0.8";
     });
-    
     const contentWrapper = document.createElement("div");
     contentWrapper.style.cssText = "display: none; max-height: 280px; overflow-y: auto; padding: 0;";
     contentWrapper.appendChild(uiContainer);
-    
     pluginWrapper.appendChild(pluginHeader);
     pluginWrapper.appendChild(contentWrapper);
     socialContainer.append(pluginWrapper);
 
     console.debug(`auto-champion-select(${version}): Report bugs to Balaclava#1912`);
-});
+}
+
+function createCard({ title, children, contentStyle }) {
+    const card = document.createElement("div");
+    card.style.cssText = "border: 1px solid #785a28; border-radius: 4px; padding: 8px; background: rgba(0,0,0,0.3);";
+    card.innerHTML = `<div style='font-weight: bold; margin-bottom: 6px; color: #c89b3c;'>${title}</div>`;
+    const content = document.createElement("div");
+    content.style.cssText = contentStyle || "display: flex; flex-direction: column; gap: 6px;";
+    children.forEach(child => content.append(child));
+    card.append(content);
+    return card;
+}
