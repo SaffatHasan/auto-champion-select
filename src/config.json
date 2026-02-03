@@ -17,5 +17,13 @@
             21,
             21
         ]
+    },
+    "controladoPrimaryRole": {
+        "role": "top",
+        "picks": [21, 21]
+    },
+    "controladoSecondaryRole": {
+        "role": "jungle",
+        "picks": [21, 21]
     }
 }
