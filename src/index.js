@@ -167,15 +167,46 @@ function buildChampionSelectUI() {
         children: [firstBanDropdown.element, secondBanDropdown.element]
     });
 
+    // Helper to set transparency and enable/disable dropdowns based on custom Checkbox state
+    function setSectionTransparencyAndDisable(section, checkbox, dropdowns) {
+        function update() {
+            const enabled = checkbox.element.hasAttribute('selected');
+            section.style.opacity = enabled ? "1" : "0.4";
+            dropdowns.forEach(dropdown => {
+                dropdown.element.setAttribute('disabled', enabled ? null : 'true');
+                // For native <select> or input, you could use .disabled = !enabled
+            });
+        }
+        update();
+        const observer = new MutationObserver(update);
+        observer.observe(checkbox.element, { attributes: true, attributeFilter: ['selected'] });
+        checkbox.element.addEventListener("click", update);
+    }
+
+    // Set transparency and disable/enable for each section
+    setSectionTransparencyAndDisable(
+        primaryRoleCard,
+        autoPickCheckbox,
+        [primaryRoleDropdown, primaryRoleChampion1Dropdown, primaryRoleChampion2Dropdown]
+    );
+    setSectionTransparencyAndDisable(
+        secondaryRoleCard,
+        autoPickCheckbox,
+        [secondaryRoleDropdown, secondaryRoleChampion1Dropdown, secondaryRoleChampion2Dropdown]
+    );
+    setSectionTransparencyAndDisable(
+        banCard,
+        banCheckbox,
+        [firstBanDropdown, secondBanDropdown]
+    );
+
     // Assemble UI
     const uiContainer = document.createElement("div");
     uiContainer.style.cssText = "display: flex; flex-direction: column; gap: 8px; padding: 0;";
     // Add settings row at the top
     uiContainer.append(
         createSettingsRow([autoAcceptCheckbox, autoPickCheckbox, banCheckbox]),
-        primaryRoleCard,
-        secondaryRoleCard,
-        banCard
+        primaryRoleCard, secondaryRoleCard, banCard
     );
 
     // Wrapper and header
@@ -191,7 +222,7 @@ function buildChampionSelectUI() {
         pluginHeader.style.opacity = isExpanded ? "1" : "0.8";
     });
     const contentWrapper = document.createElement("div");
-    contentWrapper.style.cssText = "display: none; max-height: 280px; overflow-y: auto; padding: 0;";
+    contentWrapper.style.cssText = "display: none; padding: 0;";
     contentWrapper.appendChild(uiContainer);
     pluginWrapper.appendChild(pluginHeader);
     pluginWrapper.appendChild(contentWrapper);
