@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
-import { ChampionSelect } from "./ChampionSelect.js";
+import { ChampionSelectPick } from "./ChampionSelectPick.js";
 import { AssignedRole } from "./AssignedRole.js";
 
 global.DataStore = { get: vi.fn(), set: vi.fn() };
@@ -10,11 +10,11 @@ vi.mock("https://cdn.jsdelivr.net/npm/balaclava-utils@latest", () => ({
     sleep: vi.fn(() => Promise.resolve()),
 }), { virtual: true });
 
-describe("ChampionSelect", () => {
+describe("ChampionSelectPick", () => {
     let cs;
     beforeEach(() => {
         vi.clearAllMocks();
-        cs = new ChampionSelect();
+        cs = new ChampionSelectPick();
         cs.stopWatch();
     });
     afterEach(() => { cs.stopWatch(); });

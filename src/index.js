@@ -1,5 +1,5 @@
 import { request, sleep, linkEndpoint } from "https://cdn.jsdelivr.net/npm/balaclava-utils@latest";
-import { ChampionSelect, Dropdown, RoleDropdown, Checkbox, SocialSection, AssignedRole } from "./model/index.js";
+import { ChampionSelectPick, ChampionSelectBan, Dropdown, RoleDropdown, Checkbox, SocialSection, AssignedRole } from "./model/index.js";
 import { AutoPickSwitchAction, AutoBanSwitchAction, ForcePickSwitchAction, ForceBanSwitchAction, RefreshDropdownsAction, addActions } from "./actions.js";
 
 import { version } from "../package.json";
@@ -12,7 +12,8 @@ import "./assets/style.css";
  * @description Pick or ban automatically! 🐧
  */
 
-const championSelect = new ChampionSelect();
+const championSelectPick = new ChampionSelectPick();
+const championSelectBan = new ChampionSelectBan();
 
 const autoAcceptCheckbox = new Checkbox("Accept", "controladoAutoAccept");
 const autoPickCheckbox = new Checkbox("Pick", "controladoPick");
@@ -125,8 +126,13 @@ window.addEventListener("load", async () => {
 
     linkEndpoint("/lol-gameflow/v1/gameflow-phase", parsedEvent => {
         if (parsedEvent.data === "ReadyCheck") { onReadyCheck(); }
-        if (parsedEvent.data === "ChampSelect") { championSelect.mount(); }
-        else { championSelect.unmount(); }
+        if (parsedEvent.data === "ChampSelect") {
+            championSelectPick.mount();
+            championSelectBan.mount();
+        } else {
+            championSelectPick.unmount();
+            championSelectBan.unmount();
+        }
     });
 
     // Replace the original block with a call to buildChampionSelectUI()
