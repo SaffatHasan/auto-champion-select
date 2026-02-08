@@ -220,19 +220,20 @@ function buildChampionSelectUI() {
     const pluginWrapper = document.createElement("div");
     pluginWrapper.style.cssText = "margin: 8px 4px; border: 1px solid #785a28; border-radius: 2px; background: rgba(0,0,0,0.2);";
     const pluginHeader = document.createElement("div");
-    pluginHeader.style.cssText = "background: rgba(200,155,60,0.2); padding: 8px 10px; border-bottom: 1px solid #785a28; color: #c89b3c; font-weight: bold; font-size: 12px; cursor: pointer; user-select: none; display: flex; justify-content: space-between; align-items: center;";
-    pluginHeader.innerHTML = "Auto Champion Select <span style='font-size: 10px; opacity: 0.7;'>▼</span>";
+    pluginHeader.style.cssText = "background: rgba(200,155,60,0.2); padding: 8px 10px; border-top: 1px solid #785a28; color: #c89b3c; font-weight: bold; font-size: 12px; cursor: pointer; user-select: none; display: flex; justify-content: space-between; align-items: center;";
+    pluginHeader.innerHTML = "Auto Champion Select <span style='font-size: 10px; opacity: 0.7;'>▲</span>";
     let isExpanded = false;
     pluginHeader.addEventListener("click", () => {
         isExpanded = !isExpanded;
         contentWrapper.style.display = isExpanded ? "block" : "none";
         pluginHeader.style.opacity = isExpanded ? "1" : "0.8";
+        pluginHeader.querySelector("span").textContent = isExpanded ? "▲" : "▼";
     });
     const contentWrapper = document.createElement("div");
     contentWrapper.style.cssText = "display: none; padding: 0;";
     contentWrapper.appendChild(uiContainer);
-    pluginWrapper.appendChild(pluginHeader);
     pluginWrapper.appendChild(contentWrapper);
+    pluginWrapper.appendChild(pluginHeader);
     socialContainer.append(pluginWrapper);
 
     console.debug(`auto-champion-select(${version}): Report bugs to Balaclava#1912`);
