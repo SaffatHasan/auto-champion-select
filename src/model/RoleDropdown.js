@@ -94,7 +94,7 @@ export class RoleDropdown {
         const label = document.createElement("div");
         label.id = "controlado-role-label";
         label.style = "color: inherit; font-size: 14px; font-weight: 500;";
-        label.textContent = this.text + ": " + roleText;
+        label.textContent = roleText;
         placeholder.appendChild(label);
         return placeholder;
     }
@@ -105,7 +105,7 @@ export class RoleDropdown {
             if (placeholderElement) {
                 const roleText = this.config.role ? this.config.role.charAt(0).toUpperCase() + this.config.role.slice(1) : "Select Role";
                 const label = placeholderElement.querySelector("#controlado-role-label");
-                if (label) label.textContent = this.text + ": " + roleText;
+                if (label) label.textContent = roleText;
             }
         } catch (error) {
             console.debug("auto-champion-select(RoleDropdown.updatePlaceholder): Error updating placeholder:", error);
