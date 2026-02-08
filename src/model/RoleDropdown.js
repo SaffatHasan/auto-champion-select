@@ -28,6 +28,8 @@ export class RoleDropdown {
             const option = this.getNewOption(role);
             this.element.appendChild(option);
         }
+    }
+    async customizePlaceholder() {
         let attempts = 0;
         while (!this.element.shadowRoot && attempts < 20) {
             await sleep(50);
@@ -45,7 +47,7 @@ export class RoleDropdown {
                     }
                 }
             } catch (error) {
-                console.debug("auto-champion-select(RoleDropdown.setup): Could not customize placeholder:", error);
+                console.debug("auto-champion-select(RoleDropdown.customizePlaceholder): Could not customize placeholder:", error);
             }
         }
     }
@@ -120,8 +122,9 @@ export class RoleDropdown {
             }
         });
     }
-    refresh() {
+    async refresh() {
         this.element.innerHTML = "";
-        this.setup();
+        await this.setup();
+        await this.customizePlaceholder();
     }
 }

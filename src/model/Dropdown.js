@@ -29,6 +29,8 @@ export class Dropdown {
             const option = this.getNewOption(champion);
             this.element.appendChild(option);
         }
+    }
+    async customizePlaceholder() {
         let attempts = 0;
         while (!this.element.shadowRoot && attempts < 20) {
             await sleep(50);
@@ -46,7 +48,7 @@ export class Dropdown {
                     }
                 }
             } catch (error) {
-                console.debug("auto-champion-select(Dropdown.setup): Could not customize placeholder:", error);
+                console.debug("auto-champion-select(Dropdown.customizePlaceholder): Could not customize placeholder:", error);
             }
         }
     }
@@ -155,8 +157,9 @@ export class Dropdown {
         });
         return options.length;
     }
-    refresh() {
+    async refresh() {
         this.element.innerHTML = "";
-        this.setup();
+        await this.setup();
+        await this.customizePlaceholder();
     }
 }

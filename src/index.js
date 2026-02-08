@@ -128,6 +128,16 @@ window.addEventListener("load", async () => {
 
     // Replace the original block with a call to buildChampionSelectUI()
     buildChampionSelectUI();
+    
+    // Customize dropdowns after they're in the DOM
+    await Promise.all([
+        primaryRoleDropdown.customizePlaceholder(),
+        primaryRoleChampionDropdown.customizePlaceholder(),
+        secondaryRoleDropdown.customizePlaceholder(),
+        secondaryRoleChampionDropdown.customizePlaceholder(),
+        banDropdown.customizePlaceholder(),
+    ]);
+    
     console.debug(`auto-champion-select(${version}): Report bugs to Balaclava#1912`);
 });
 
