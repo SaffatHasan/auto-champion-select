@@ -101,6 +101,7 @@ window.addEventListener("load", async () => {
     ]);
 
     addActions([
+        new AutoPickSwitchAction(() => autoPickCheckbox.toggle()),
         new AutoBanSwitchAction(() => banCheckbox.toggle()),
         new ForcePickSwitchAction(),
         new ForceBanSwitchAction(),
