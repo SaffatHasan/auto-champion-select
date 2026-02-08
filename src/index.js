@@ -21,19 +21,16 @@ const banCheckbox = new Checkbox("Ban", "controladoBan");
 
 // Simplified role-based pick system - only show champion picks for the selected role
 const primaryRoleDropdown = new RoleDropdown("Primary Role", "controladoPrimaryRole");
-const primaryRoleChampion1Dropdown = new Dropdown("Champion 1", "controladoPrimaryRole", 0, getPlayableChampions);
-const primaryRoleChampion2Dropdown = new Dropdown("Champion 2", "controladoPrimaryRole", 1, getPlayableChampions);
+const primaryRoleChampionDropdown = new Dropdown("Champion", "controladoPrimaryRole", 0, getPlayableChampions);
 
 const secondaryRoleDropdown = new RoleDropdown("Secondary Role", "controladoSecondaryRole");
-const secondaryRoleChampion1Dropdown = new Dropdown("Champion 1", "controladoSecondaryRole", 0, getPlayableChampions);
-const secondaryRoleChampion2Dropdown = new Dropdown("Champion 2", "controladoSecondaryRole", 1, getPlayableChampions);
+const secondaryRoleChampionDropdown = new Dropdown("Champion", "controladoSecondaryRole", 0, getPlayableChampions);
 
 // Link role dropdowns for swap notifications
 primaryRoleDropdown.setOtherRoleDropdown(secondaryRoleDropdown);
 secondaryRoleDropdown.setOtherRoleDropdown(primaryRoleDropdown);
 
-const firstBanDropdown = new Dropdown("Ban 1", "controladoBan", 0, getAllChampions);
-const secondBanDropdown = new Dropdown("Ban 2", "controladoBan", 1, getAllChampions);
+const banDropdown = new Dropdown("Ban 1", "controladoBan", 0, getAllChampions);
 
 function getSocialContainer() {
     return document.querySelector(".lol-social-roster");
@@ -91,13 +88,10 @@ window.addEventListener("load", async () => {
         autoPickCheckbox.setup(),
         banCheckbox.setup(),
         primaryRoleDropdown.setup(),
-        primaryRoleChampion1Dropdown.setup(),
-        primaryRoleChampion2Dropdown.setup(),
+        primaryRoleChampionDropdown.setup(),
         secondaryRoleDropdown.setup(),
-        secondaryRoleChampion1Dropdown.setup(),
-        secondaryRoleChampion2Dropdown.setup(),
-        firstBanDropdown.setup(),
-        secondBanDropdown.setup()
+        secondaryRoleChampionDropdown.setup(),
+        banDropdown.setup(),
     ]);
 
     addActions([
@@ -106,10 +100,8 @@ window.addEventListener("load", async () => {
         new ForcePickSwitchAction(),
         new ForceBanSwitchAction(),
         new RefreshDropdownsAction([
-            primaryRoleChampion1Dropdown,
-            primaryRoleChampion2Dropdown,
-            secondaryRoleChampion1Dropdown,
-            secondaryRoleChampion2Dropdown,
+            primaryRoleChampionDropdown,
+            secondaryRoleChampionDropdown,
         ]),
     ]);
 
@@ -117,10 +109,8 @@ window.addEventListener("load", async () => {
         if (parsedEvent.eventType === "Update") {
             console.debug("auto-champion-select(wallet): Refreshing dropdowns...");
             Promise.all([
-                primaryRoleChampion1Dropdown.refresh(),
-                primaryRoleChampion2Dropdown.refresh(),
-                secondaryRoleChampion1Dropdown.refresh(),
-                secondaryRoleChampion2Dropdown.refresh(),
+                primaryRoleChampionDropdown.refresh(),
+                secondaryRoleChampionDropdown.refresh(),
             ]);
         }
     });
@@ -162,16 +152,16 @@ function buildChampionSelectUI() {
     const primaryRoleCard = createCard({
         title: "PRIMARY",
         headerContent: primaryRoleDropdown.element,
-        children: [primaryRoleChampion1Dropdown.element, primaryRoleChampion2Dropdown.element]
+        children: [primaryRoleChampionDropdown.element]
     });
     const secondaryRoleCard = createCard({
         title: "SECONDARY",
         headerContent: secondaryRoleDropdown.element,
-        children: [secondaryRoleChampion1Dropdown.element, secondaryRoleChampion2Dropdown.element]
+        children: [secondaryRoleChampionDropdown.element]
     });
     const banCard = createCard({
         title: "BANS",
-        children: [firstBanDropdown.element, secondBanDropdown.element]
+        children: [banDropdown.element]
     });
 
     // Helper to set transparency and enable/disable dropdowns based on custom Checkbox state
@@ -194,17 +184,17 @@ function buildChampionSelectUI() {
     setSectionTransparencyAndDisable(
         primaryRoleCard,
         autoPickCheckbox,
-        [primaryRoleDropdown, primaryRoleChampion1Dropdown, primaryRoleChampion2Dropdown]
+        [primaryRoleDropdown, primaryRoleChampionDropdown]
     );
     setSectionTransparencyAndDisable(
         secondaryRoleCard,
         autoPickCheckbox,
-        [secondaryRoleDropdown, secondaryRoleChampion1Dropdown, secondaryRoleChampion2Dropdown]
+        [secondaryRoleDropdown, secondaryRoleChampionDropdown]
     );
     setSectionTransparencyAndDisable(
         banCard,
         banCheckbox,
-        [firstBanDropdown, secondBanDropdown]
+        [banDropdown]
     );
 
     // Assemble UI
