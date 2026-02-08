@@ -212,8 +212,8 @@ function buildChampionSelectUI() {
     uiContainer.style.cssText = "display: flex; flex-direction: column; gap: 8px; padding: 0;";
     // Add settings row at the top
     uiContainer.append(
+        primaryRoleCard, secondaryRoleCard, banCard,
         createSettingsRow([autoAcceptCheckbox, autoPickCheckbox, banCheckbox]),
-        primaryRoleCard, secondaryRoleCard, banCard
     );
 
     // Wrapper and header
