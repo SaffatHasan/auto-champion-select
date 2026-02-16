@@ -22,7 +22,7 @@
 }
 
 #controlado-search {
-    width: 100%;
+    max-width: 70px;
     padding: 6px 8px;
     font-size: 14px;
     color: #c89b3c;

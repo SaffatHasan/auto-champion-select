@@ -84,7 +84,7 @@ export class Dropdown {
         const placeholder = document.createElement("div");
         placeholder.classList.add("ui-dropdown-current-content");
         placeholder.id = "controlado-placeholder";
-        placeholder.style = "display: flex; align-items: center; gap: 12px; width: 100%;";
+        placeholder.style = "display: flex; align-items: center; justify-content: space-between; gap: 12px; width: 100%;";
         const championsArray = this.config.champions || this.config.picks || [];
         const selectedId = championsArray[this.configIndex];
         const selectedChampion = this.champions.find(c => c.id === selectedId);
@@ -94,14 +94,14 @@ export class Dropdown {
         labelContainer.style = "display: flex; flex-direction: column; gap: 2px; flex-shrink: 0;";
         const championLabel = document.createElement("div");
         championLabel.id = "controlado-champion-label";
-        championLabel.style = "color: inherit; font-size: 14px; font-weight: 500;";
+        championLabel.style = "color: inherit; font-size: 14px; font-weight: 500; white-space: nowrap; overflow: hidden; flex: 1;";
         championLabel.textContent = championName;
         labelContainer.appendChild(championLabel);
         const input = document.createElement("input");
         input.id = "controlado-search";
         input.type = "text";
         input.placeholder = "Search...";
-        input.style = "flex: 1; padding: 4px 8px; color: inherit; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 4px; outline: none; font-family: inherit; font-size: inherit; font-weight: inherit; transition: all 0.2s ease;";
+        input.style = "flex: 0 1 auto; max-width: 70px; padding: 4px 8px; color: inherit; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 4px; outline: none; font-family: inherit; font-size: inherit; font-weight: inherit; transition: all 0.2s ease;";
         input.addEventListener("input", (e) => this.filterOptions(e.target.value));
         input.addEventListener("focus", (e) => {
             e.target.style.background = "rgba(255, 255, 255, 0.15)";
