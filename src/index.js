@@ -170,7 +170,7 @@ function buildChampionSelectUI() {
         children: [secondaryRoleChampionDropdown.element]
     });
     const banCard = createCard({
-        title: "BANS",
+        title: "BAN",
         children: [banDropdown.element]
     });
 
